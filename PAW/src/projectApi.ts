@@ -1,34 +1,28 @@
-import { Project } from "./projectInterface";
+// projectApi.ts
+
+import { Project } from "./interfaces/projectInterface";
+import { ProjectService } from "./projectService";
+
+const projectService = new ProjectService();
 
 export class ProjectApi {
   static getProjects(): Project[] {
-    const projectsJson = localStorage.getItem('projects');
-    return projectsJson ? JSON.parse(projectsJson) : [];
+    return projectService.getAllProjects();
   }
 
-  static saveProjects(projects: Project[]): void {
-    localStorage.setItem('projects', JSON.stringify(projects));
+  static getProjectById(id: number): Project | undefined {
+    return projectService.getProjectById(id);
   }
 
   static addProject(project: Project): void {
-    const projects = this.getProjects();
-    projects.push(project);
-    this.saveProjects(projects);
+    projectService.addProject(project);
   }
 
   static updateProject(updatedProject: Project): void {
-    const projects = this.getProjects();
-    const index = projects.findIndex((p) => p.id === updatedProject.id);
-
-    if (index !== -1) {
-      projects[index] = updatedProject;
-      this.saveProjects(projects);
-    }
+    projectService.updateProject(updatedProject);
   }
 
   static deleteProject(projectId: number): void {
-    const projects = this.getProjects();
-    const updatedProjects = projects.filter((p) => p.id !== projectId);
-    this.saveProjects(updatedProjects);
+    projectService.deleteProject(projectId);
   }
 }

@@ -7,9 +7,27 @@ h1 {
   color: #333;
 }
 
+
 form {
   margin-bottom: 20px;
+  margin-top: 20px;
 }
+
+#add-project-container {
+  background-color: #e7e7e7;
+  padding: 20px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+#add-project-form button[type="submit"] {
+  background-color: #61bbc7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
 
 label {
   display: block;
@@ -40,10 +58,10 @@ button {
 }
 
 .project-card {
-  border: 1px solid #ddd;
+  border: 1px solid #000000;
   padding: 10px;
   margin-bottom: 10px;
-  background-color: #f9f9f9;
+  background-color: #e7e7e7;
 }
 
 #update-modal {
@@ -70,3 +88,49 @@ button {
 .modal-buttons button {
   margin-left: 10px;
 }
+
+.nav-container {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.logo {
+  margin: 0;
+  color:#61bbc7
+}
+
+.user-info {
+  font-size: 14px;
+}
+
+.user-name {
+  font-size: 20px;
+}
+
+
+#nav-links {
+  display: flex;
+  align-items: center;
+}
+
+#nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 10px 20px;
+}
+
+#nav-links a:hover {
+  background-color: #333333;
+}
+
+#nav-links div {
+  margin-left: auto;
+}
+
+

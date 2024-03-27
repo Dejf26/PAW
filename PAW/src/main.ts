@@ -1,5 +1,16 @@
 import { ProjectApi } from './projectApi';
-import { Project } from './projectInterface';
+import { Project } from './interfaces/projectInterface';
+import { User } from "./user";
+
+const user = User.getInstance();
+const userNameElement = document.getElementById('user-name');
+if (userNameElement) {
+  userNameElement.textContent = user.getUser().firstName;
+}
+
+const activeProjectId = localStorage.getItem('activeProjectId');
+
+
 
 function displayProjects(projects: Project[]): void {
   const projectsContainer = document.getElementById('projects-container');
@@ -20,10 +31,12 @@ function createProjectElement(project: Project): HTMLElement {
     <strong>${project.name}</strong>: ${project.description}
     <button class="btn-update" data-id="${project.id}">Edytuj</button>
     <button class="btn-delete" data-id="${project.id}">Usuń</button>
+    <button class="btn-select" data-id="${project.id}">${activeProjectId === String(project.id) ? 'Wybrano' : 'Wybierz'}</button>
   `;
 
   const updateButton = projectElement.querySelector('.btn-update');
   const deleteButton = projectElement.querySelector('.btn-delete');
+  const selectButton = projectElement.querySelector('.btn-select');
 
   if (updateButton) {
     updateButton.addEventListener('click', () => openUpdateModal(project.id));
@@ -31,6 +44,10 @@ function createProjectElement(project: Project): HTMLElement {
 
   if (deleteButton) {
     deleteButton.addEventListener('click', () => deleteProject(project.id));
+  }
+
+  if (selectButton) {
+    selectButton.addEventListener('click', () => selectProject(project.id));
   }
 
   return projectElement;
@@ -115,7 +132,29 @@ function deleteProject(projectId: number): void {
 
     const updatedProjects = ProjectApi.getProjects();
     displayProjects(updatedProjects);
+
+    // Usuwamy aktywny projekt z localStorage, jeśli jego ID jest równie zapisane
+    const activeProjectId = localStorage.getItem('activeProjectId');
+    if (activeProjectId && parseInt(activeProjectId) === projectId) {
+      localStorage.removeItem('activeProjectId');
+    }
   }
+}
+
+
+function selectProject(projectId: number): void {
+  localStorage.setItem('activeProjectId', String(projectId));
+   const selectButtons = document.querySelectorAll('.btn-select') as NodeListOf<HTMLButtonElement>;
+  selectButtons.forEach(button => {
+    button.textContent = 'Wybierz';
+    button.disabled = false;
+  });
+  const selectedButton = document.querySelector(`.btn-select[data-id="${projectId}"]`) as HTMLButtonElement;
+  if (selectedButton) {
+    selectedButton.textContent = 'Wybrano';
+    selectedButton.disabled = true;
+  }
+  window.location.href = './active-project.html';
 }
 
 const projects = ProjectApi.getProjects();
@@ -126,3 +165,4 @@ const addProjectFormElement = document.getElementById('add-project-form');
 if (addProjectFormElement) {
   addProjectFormElement.addEventListener('submit', addProjectForm);
 }
+

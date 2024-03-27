@@ -1,5 +1,5 @@
 // ProjectService.ts
-import { Project } from "./projectInterface";
+import { Project } from "./interfaces/projectInterface";
 
 export class ProjectService {
    private projects: Project[];

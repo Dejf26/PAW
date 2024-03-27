@@ -7,8 +7,20 @@
   <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
-  <h1>ManagMe App</h1>
-  
+  <header>
+    <nav class="navbar">
+      <div class="nav-container">
+        <h1 class="logo">ManagMe</h1>
+        <div id="nav-links">
+          <a href="#">All Projects</a>
+          <a href="active-project.html">Active Project</a>
+              <div>
+<div class="user-info">Welcome <span id="user-name"></span></div>
+      </div>
+    </nav>
+  </header>  
+
+  <div id="add-project-container">
   <form id="add-project-form">
     <label for="project-name">Nazwa projektu:</label>
     <input type="text" id="project-name" required>
@@ -18,6 +30,7 @@
 
     <button type="submit">Dodaj projekt</button>
   </form>
+</div>
 
   <div id="projects-container"></div>
 
