@@ -165,4 +165,3 @@ const addProjectFormElement = document.getElementById('add-project-form');
 if (addProjectFormElement) {
   addProjectFormElement.addEventListener('submit', addProjectForm);
 }
-
