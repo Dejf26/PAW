@@ -1,5 +1,3 @@
-// projectApi.ts
-
 import { Project } from "./interfaces/projectInterface";
 import { ProjectService } from "./projectService";
 

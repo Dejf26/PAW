@@ -29,9 +29,9 @@ function createProjectElement(project: Project): HTMLElement {
   projectElement.classList.add('project-card');
   projectElement.innerHTML = `
     <strong>${project.name}</strong>: ${project.description}
-    <button class="btn-update" data-id="${project.id}">Edytuj</button>
-    <button class="btn-delete" data-id="${project.id}">Usuń</button>
-    <button class="btn-select" data-id="${project.id}">${activeProjectId === String(project.id) ? 'Wybrano' : 'Wybierz'}</button>
+    <button class="btn-update" data-id="${project.id}">Edit</button>
+    <button class="btn-delete" data-id="${project.id}">Delete</button>
+    <button class="btn-select" data-id="${project.id}">${activeProjectId === String(project.id) ? 'Selected' : 'Select'}</button>
   `;
 
   const updateButton = projectElement.querySelector('.btn-update');
@@ -125,7 +125,7 @@ function saveChanges(projectId: number): void {
 }
 
 function deleteProject(projectId: number): void {
-  const confirmDelete = confirm('Czy na pewno chcesz usunąć ten projekt?');
+  const confirmDelete = confirm('Are you sure you want to delete this project?');
 
   if (confirmDelete) {
     ProjectApi.deleteProject(projectId);
@@ -133,7 +133,6 @@ function deleteProject(projectId: number): void {
     const updatedProjects = ProjectApi.getProjects();
     displayProjects(updatedProjects);
 
-    // Usuwamy aktywny projekt z localStorage, jeśli jego ID jest równie zapisane
     const activeProjectId = localStorage.getItem('activeProjectId');
     if (activeProjectId && parseInt(activeProjectId) === projectId) {
       localStorage.removeItem('activeProjectId');
@@ -146,12 +145,12 @@ function selectProject(projectId: number): void {
   localStorage.setItem('activeProjectId', String(projectId));
    const selectButtons = document.querySelectorAll('.btn-select') as NodeListOf<HTMLButtonElement>;
   selectButtons.forEach(button => {
-    button.textContent = 'Wybierz';
+    button.textContent = 'Select';
     button.disabled = false;
   });
   const selectedButton = document.querySelector(`.btn-select[data-id="${projectId}"]`) as HTMLButtonElement;
   if (selectedButton) {
-    selectedButton.textContent = 'Wybrano';
+    selectedButton.textContent = 'Selected';
     selectedButton.disabled = true;
   }
   window.location.href = './active-project.html';

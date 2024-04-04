@@ -11,14 +11,14 @@ if (userNameElement) {
 document.addEventListener('DOMContentLoaded', () => {
     const activeProjectId = localStorage.getItem('activeProjectId');
     if (activeProjectId) {
-        const project = ProjectApi.getProjectById(Number(activeProjectId)); // Pobieranie szczegółów aktywnego projektu
+        const project = ProjectApi.getProjectById(Number(activeProjectId));
         if (project) {
             displayProjectDetails(project);
         } else {
-            console.error('Nie można znaleźć projektu o podanym ID');
+            console.error('The project with the given ID could not be foundD');
         }
     } else {
-        console.error('Brak aktywnego projektu');
+        console.error('No active project');
     }
 });
 
@@ -27,8 +27,8 @@ function displayProjectDetails(project: Project): void {
     if (projectDetailsContainer) {
         projectDetailsContainer.innerHTML = `
         <p><strong>ID</strong>: ${project.id}</p>
-        <p><strong>Nazwa</strong>: ${project.name}</p>
-        <p><strong>Opis</strong>: ${project.description}</p>
+        <p><strong>Name</strong>: ${project.name}</p>
+        <p><strong>Description</strong>: ${project.description}</p>
         `;
     }
 }

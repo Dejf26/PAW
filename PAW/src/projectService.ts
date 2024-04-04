@@ -1,4 +1,3 @@
-// ProjectService.ts
 import { Project } from "./interfaces/projectInterface";
 
 export class ProjectService {

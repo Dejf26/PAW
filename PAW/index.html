@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ManagMe App</title>
-  <link rel="stylesheet" href="src/style.css">
+  <link rel="stylesheet" href="src/styles/style.css">
 </head>
 <body>
   <header>
@@ -14,36 +14,40 @@
         <div id="nav-links">
           <a href="#">All Projects</a>
           <a href="active-project.html">Active Project</a>
+          <a href="stories.html">Stories</a>
               <div>
 <div class="user-info">Welcome <span id="user-name"></span></div>
       </div>
     </nav>
   </header>  
+  <h1>Add Project</h1>
 
   <div id="add-project-container">
   <form id="add-project-form">
-    <label for="project-name">Nazwa projektu:</label>
+    <label for="project-name">Project name:</label>
     <input type="text" id="project-name" required>
     
-    <label for="project-description">Opis projektu:</label>
+    <label for="project-description">Description:</label>
     <input type="text" id="project-description" required>
 
-    <button type="submit">Dodaj projekt</button>
+    <button type="submit">Add project</button>
   </form>
 </div>
+
+<h1>Project List</h1>
 
   <div id="projects-container"></div>
 
   <div id="update-modal">
-    <label for="update-project-name">Nowa nazwa projektu:</label>
+    <label for="update-project-name">New project name:</label>
     <input type="text" id="update-project-name" class="modal-input" required>
     
-    <label for="update-project-description">Nowy opis projektu:</label>
+    <label for="update-project-description">New project description:</label>
     <input type="text" id="update-project-description" class="modal-input" required>
 
     <div class="modal-buttons">
-      <button id="save-changes-button">Zapisz zmiany</button>
-      <button id="cancel-button">Anuluj</button>
+      <button id="save-changes-button">Save changes</button>
+      <button id="cancel-button">Close</button>
     </div>
   </div>
 

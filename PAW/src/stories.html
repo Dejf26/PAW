@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Stories</title>
+    <link rel="stylesheet" href="styles/stories.css">
+    
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+          <div class="nav-container">
+            <h1 class="logo">ManagMe</h1>
+            <div id="nav-links">
+            <a href="index.html">All Projects</a>
+            <a href="active-project.html">Active Project</a>
+            <a href="#">Stories</a>
+                <div>
+            <div class="user-info">Welcome <span id="user-name"></span></div>
+          </div>
+        </nav>
+      </header>  
+
+    <h1>Add Project Story</h1>
+
+    <form id="add-story-form">
+        <label for="story-name">Story name:</label>
+        <input type="text" id="story-name" required>
+
+        <label for="story-description">Story description:</label>
+        <input type="text" id="story-description" required>
+
+        <label for="story-priority">Priority:</label>
+        <select id="story-priority" required>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+
+        <label for="story-project">Project:</label>
+        <input type="number" id="story-project" required>
+
+        <label for="story-owner">Owner:</label>
+        <input type="number" id="story-owner" required>
+
+        <button type="submit">Add story</button>
+    </form>
+   
+    <h1>Stories List</h1>
+
+    <button id="btnTodo">Todo</button>
+    <button id="btnDoing">Doing</button>
+    <button id="btnDone">Done</button>
+   
+    <div id="story-list"></div>
+
+
+    <div id="story-details-modal" class="modal">
+        <button id="close-modal-btn">Close</button>
+        <div class="modal-content"></div>
+      </div>
+    
+
+<div id="edit-modal" class="modal">
+    <div class="modal-content">
+        <span id="close-modal" class="close">&times;</span>
+        <h2>Edit story</h2>
+        <form id="edit-story-form">
+            <label for="edit-story-name">New story name:</label>
+            <input type="text" id="edit-story-name" class="modal-input" required>
+
+            <label for="edit-story-description">New story description:</label>
+            <input type="text" id="edit-story-description" class="modal-input" required>
+
+            <label for="edit-story-priority">New priority:</label>
+            <select id="edit-story-priority" class="modal-input" required>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+
+            <label for="edit-story-status">New status:</label>
+            <select id="edit-story-status" class="modal-input" required>
+                <option value="todo">Todo</option>
+                <option value="doing">Doing</option>
+                <option value="done">Done</option>
+            </select>
+
+            <div class="modal-buttons">
+                <button type="button" id="save-changes-button">Save changes</button>
+                <button type="button" id="cancel-button">Close</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <script type="module" src="/src/storyList.ts"></script>
+</body>
+</html>
