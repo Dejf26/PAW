@@ -1,5 +1,5 @@
 import { Story } from "./interfaces/storyInterface";
-import { StoryService } from "./storyService";
+import { apiService } from "./apiService";
 import { User } from "./user";
 
 const user = User.getInstance();
@@ -7,8 +7,6 @@ const userNameElement = document.getElementById('user-name');
 if (userNameElement) {
   userNameElement.textContent = user.getUser().firstName;
 }
-
-const storyService = new StoryService();
 
 function displayStoryDetailsModal(story: Story): void {
     const modal = document.getElementById('story-details-modal');
@@ -101,7 +99,7 @@ function createStoryElement(story: Story): HTMLElement {
   
 
 function displayStories(status: 'todo' | 'doing' | 'done'): void {
-    const stories = storyService.getAllStories().filter(story => story.status === status);
+    const stories = apiService.getStories().filter(story => story.status === status);
 
     const storyList = document.getElementById('story-list');
     if (storyList) {
@@ -165,24 +163,18 @@ function saveChanges(storyId: number): void {
     const newPriority = editStoryPriorityInput.value as 'low' | 'medium' | 'high';
     const newStatus = editStoryStatusInput.value as 'todo' | 'doing' | 'done';
 
-    const existingStory = storyService.getStoryById(storyId);
-    if (!existingStory) {
-        console.error('Not found');
-        return;
-    }
-
     const updatedStory: Story = {
         id: storyId,
         name: newName,
         description: newDescription,
         priority: newPriority,
-        project: existingStory.project,
-        createdAt: existingStory.createdAt,
+        project: 0,
+        createdAt: new Date(),
         status: newStatus,
-        ownerId: existingStory.ownerId
+        ownerId: 0
     };
 
-    storyService.updateStory(updatedStory);
+    apiService.updateStory(updatedStory);
 
     const editModal = document.getElementById('edit-modal');
     if (editModal) {
@@ -196,7 +188,7 @@ function saveChanges(storyId: number): void {
 
 
 function deleteStory(storyId: number): void {
-    storyService.deleteStory(storyId);
+    apiService.deleteStory(storyId);
 
     displayStories('todo'); 
 }
@@ -226,7 +218,7 @@ function addStory(event: Event): void {
         ownerId
     };
 
-    storyService.addStory(newStory);
+    apiService.addStory(newStory);
 
     displayStories('todo');
 
@@ -261,3 +253,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     displayStories('todo');
 });
+
+const toggleStoryFormButton = document.getElementById('toggle-story-form-button');
+
+if (toggleStoryFormButton) {
+  toggleStoryFormButton.addEventListener('click', () => {
+    const addStoryForm = document.getElementById('add-story-form');
+    if (addStoryForm) {
+      addStoryForm.classList.toggle('hidden-fields');
+    }
+  });
+}

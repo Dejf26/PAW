@@ -12,7 +12,7 @@ body {
     margin-top: 20px;
   }
   
-  #add-story-form {
+  #add-story-container {
     background-color: #e7e7e7;
     padding: 20px;
     border: 1px solid #000000;
@@ -20,7 +20,7 @@ body {
     margin-bottom: 20px;
   }
   
-  #add-story-form button[type="submit"] {
+  #add-story-container button[type="submit"] {
     background-color: #61bbc7;
     color: white;
     border: none;
@@ -153,5 +153,9 @@ body {
   
   #nav-links div {
     margin-left: auto;
+  }
+  
+  .hidden-fields {
+    display: none;
   }
   

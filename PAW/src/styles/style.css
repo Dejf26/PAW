@@ -133,4 +133,8 @@ button {
   margin-left: auto;
 }
 
+.hidden-fields {
+  display: none;
+}
+
 

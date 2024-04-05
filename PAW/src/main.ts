@@ -1,4 +1,4 @@
-import { ProjectApi } from './projectApi';
+import { apiService } from './apiService';
 import { Project } from './interfaces/projectInterface';
 import { User } from "./user";
 
@@ -66,19 +66,19 @@ function addProjectForm(event: Event): void {
       description: descriptionInput.value,
     };
 
-    ProjectApi.addProject(newProject);
+    apiService.addProject(newProject);
 
     nameInput.value = '';
     descriptionInput.value = '';
 
-    const updatedProjects = ProjectApi.getProjects();
+    const updatedProjects = apiService.getProjects();
     displayProjects(updatedProjects);
   }
 }
 
 function openUpdateModal(projectId: number): void {
   const updateModal = document.getElementById('update-modal');
-  const projectToUpdate = ProjectApi.getProjects().find((p) => p.id === projectId);
+  const projectToUpdate = apiService.getProjects().find((p) => p.id === projectId);
 
   if (updateModal && projectToUpdate) {
     const projectNameInput = document.getElementById('update-project-name') as HTMLInputElement;
@@ -112,9 +112,9 @@ function saveChanges(projectId: number): void {
       description: projectDescriptionInput.value,
     };
 
-    ProjectApi.updateProject(updatedProject);
+    apiService.updateProject(updatedProject);
 
-    const updatedProjects = ProjectApi.getProjects();
+    const updatedProjects = apiService.getProjects();
     displayProjects(updatedProjects);
 
     const updateModal = document.getElementById('update-modal');
@@ -128,9 +128,9 @@ function deleteProject(projectId: number): void {
   const confirmDelete = confirm('Are you sure you want to delete this project?');
 
   if (confirmDelete) {
-    ProjectApi.deleteProject(projectId);
+    apiService.deleteProject(projectId);
 
-    const updatedProjects = ProjectApi.getProjects();
+    const updatedProjects = apiService.getProjects();
     displayProjects(updatedProjects);
 
     const activeProjectId = localStorage.getItem('activeProjectId');
@@ -156,7 +156,7 @@ function selectProject(projectId: number): void {
   window.location.href = './active-project.html';
 }
 
-const projects = ProjectApi.getProjects();
+const projects = apiService.getProjects();
 
 displayProjects(projects);
 
@@ -164,3 +164,15 @@ const addProjectFormElement = document.getElementById('add-project-form');
 if (addProjectFormElement) {
   addProjectFormElement.addEventListener('submit', addProjectForm);
 }
+
+const toggleFormButton = document.getElementById('toggle-form-button');
+
+if (toggleFormButton) {
+  toggleFormButton.addEventListener('click', () => {
+    const addProjectForm = document.getElementById('add-project-form');
+    if (addProjectForm) {
+      addProjectForm.classList.toggle('hidden-fields');
+    }
+  });
+}
+

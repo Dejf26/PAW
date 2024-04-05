@@ -1,6 +1,6 @@
 import { User } from "./user";
 import { Project } from "./interfaces/projectInterface";
-import { ProjectApi } from "./projectApi";
+import { apiService } from "./apiService";
 
 const user = User.getInstance();
 const userNameElement = document.getElementById('user-name');
@@ -11,7 +11,7 @@ if (userNameElement) {
 document.addEventListener('DOMContentLoaded', () => {
     const activeProjectId = localStorage.getItem('activeProjectId');
     if (activeProjectId) {
-        const project = ProjectApi.getProjectById(Number(activeProjectId));
+        const project = apiService.getProjectById(Number(activeProjectId));
         if (project) {
             displayProjectDetails(project);
         } else {
