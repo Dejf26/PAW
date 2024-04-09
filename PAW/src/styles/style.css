@@ -89,50 +89,6 @@ button {
   margin-left: 10px;
 }
 
-.nav-container {
-  background-color: #000000;
-  color: #ffffff;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: right;
-  margin-bottom: 20px;
-}
-
-.logo {
-  margin: 0;
-  color:#61bbc7
-}
-
-.user-info {
-  font-size: 14px;
-}
-
-.user-name {
-  font-size: 20px;
-}
-
-
-#nav-links {
-  display: flex;
-  align-items: center;
-}
-
-#nav-links a {
-  color: #ffffff;
-  text-decoration: none;
-  padding: 10px 20px;
-}
-
-#nav-links a:hover {
-  background-color: #333333;
-}
-
-#nav-links div {
-  margin-left: auto;
-}
-
 .hidden-fields {
   display: none;
 }

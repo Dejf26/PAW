@@ -1,13 +1,9 @@
-import { User } from "./user";
 import { Project } from "./interfaces/projectInterface";
-import { ApiService } from './apiService';
 import { ProjectService } from "./projectService"; // Zmiana importu
+import { createNavbar, setUserDisplayName } from "./navbar";
 
-const user = User.getInstance();
-const userNameElement = document.getElementById('user-name');
-if (userNameElement) {
-  userNameElement.textContent = user.getUser().firstName;
-}
+createNavbar();
+setUserDisplayName();
 
 const projectService = new ProjectService(); // Utwórz instancję ProjectService
 

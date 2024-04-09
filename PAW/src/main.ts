@@ -1,14 +1,16 @@
 import { Project } from './interfaces/projectInterface';
-import { User } from "./user";
 import { ApiService } from './apiService';
 import { ProjectService } from './projectService';
+import { createNavbar, setUserDisplayName } from './navbar';
 
+createNavbar();
+setUserDisplayName();
 
-const user = User.getInstance();
-const userNameElement = document.getElementById('user-name');
-if (userNameElement) {
-  userNameElement.textContent = user.getUser().firstName;
-}
+// const user = User.getInstance();
+// const userNameElement = document.getElementById('user-name');
+// if (userNameElement) {
+//   userNameElement.textContent = user.getUser().firstName;
+// }
 
 ApiService.registerService('projects', new ProjectService());
 

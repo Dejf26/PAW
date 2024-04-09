@@ -1,15 +1,12 @@
 import { Story } from "./interfaces/storyInterface";
-import { User } from "./user";
 import { ApiService } from './apiService';
 import { StoryService } from './storyService';
+import { createNavbar, setUserDisplayName } from "./navbar";
+
+createNavbar();
+setUserDisplayName();
 
 ApiService.registerService('stories', new StoryService());
-
-const user = User.getInstance();
-const userNameElement = document.getElementById('user-name');
-if (userNameElement) {
-  userNameElement.textContent = user.getUser().firstName;
-}
 
 function displayStoryDetailsModal(story: Story): void {
     const modal = document.getElementById('story-details-modal');
