@@ -1,55 +1,45 @@
-import { Project } from "./interfaces/projectInterface";
-import { Story } from "./interfaces/storyInterface";
-import { ProjectService } from "./projectService";
-import { StoryService } from "./storyService";
-
-export class apiService {
-    private static projectService = new ProjectService();
-    private static storyService = new StoryService();
-
-    static getProjects(): Project[] {
-        return this.projectService.getAllProjects();
+export class ApiService {
+    private static services: { [key: string]: any } = {};
+  
+    static registerService(serviceName: string, serviceInstance: any): void {
+      this.services[serviceName] = serviceInstance;
     }
-
-    static getProjectById(id: number): Project | undefined {
-        return this.projectService.getProjectById(id);
+  
+    static add<T>(serviceName: string, item: T): void {
+      const service = this.services[serviceName];
+      if (service && service.add) {
+        service.add(item);
+      }
     }
-
-    static addProject(project: Project): void {
-        this.projectService.addProject(project);
+  
+    static getAll<T>(serviceName: string): T[] {
+      const service = this.services[serviceName];
+      if (service && service.getAll) {
+        return service.getAll();
+      }
+      return [];
     }
-
-    static updateProject(updatedProject: Project): void {
-        this.projectService.updateProject(updatedProject);
+  
+    static getOne<T>(serviceName: string, itemId: number): T | undefined {
+      const service = this.services[serviceName];
+      if (service && service.getOne) {
+        return service.getOne(itemId);
+      }
+      return undefined;
     }
-
-    static deleteProject(projectId: number): void {
-        this.projectService.deleteProject(projectId);
+  
+    static update<T>(serviceName: string, item: T): void {
+      const service = this.services[serviceName];
+      if (service && service.update) {
+        service.update(item);
+      }
     }
-
-    //
-
-    static getStories(): Story[] {
-        return this.storyService.getAllStories();
+  
+    static delete(serviceName: string, itemId: number): void {
+      const service = this.services[serviceName];
+      if (service && service.delete) {
+        service.delete(itemId);
+      }
     }
-
-    static getStoriesByProjectId(projectId: number): Story[] {
-        return this.storyService.getAllStories().filter(story => story.project === projectId);
-    }
-
-    static getStoryById(storyId: number): Story | undefined {
-        return this.storyService.getStoryById(storyId);
-    }
-
-    static addStory(story: Story): void {
-        this.storyService.addStory(story);
-    }
-
-    static updateStory(updatedStory: Story): void {
-        this.storyService.updateStory(updatedStory);
-    }
-
-    static deleteStory(storyId: number): void {
-        this.storyService.deleteStory(storyId);
-    }
-}
+  }
+  

@@ -1,6 +1,9 @@
 import { Story } from "./interfaces/storyInterface";
-import { apiService } from "./apiService";
 import { User } from "./user";
+import { ApiService } from './apiService';
+import { StoryService } from './storyService';
+
+ApiService.registerService('stories', new StoryService());
 
 const user = User.getInstance();
 const userNameElement = document.getElementById('user-name');
@@ -67,7 +70,6 @@ window.onclick = (event) => {
     }
 };
 
-
 function createStoryElement(story: Story): HTMLElement {
     const storyElement = document.createElement('div');
     storyElement.classList.add('story-card');
@@ -95,11 +97,10 @@ function createStoryElement(story: Story): HTMLElement {
     }
   
     return storyElement;
-  }
-  
+}
 
 function displayStories(status: 'todo' | 'doing' | 'done'): void {
-    const stories = apiService.getStories().filter(story => story.status === status);
+    const stories = ApiService.getAll<Story>('stories').filter(story => story.status === status);
 
     const storyList = document.getElementById('story-list');
     if (storyList) {
@@ -151,7 +152,6 @@ function openEditModal(story: Story): void {
     }
 }
 
-
 function saveChanges(storyId: number): void {
     const editStoryNameInput = document.getElementById('edit-story-name') as HTMLInputElement;
     const editStoryDescriptionInput = document.getElementById('edit-story-description') as HTMLInputElement;
@@ -174,7 +174,7 @@ function saveChanges(storyId: number): void {
         ownerId: 0
     };
 
-    apiService.updateStory(updatedStory);
+    ApiService.update('stories', updatedStory);
 
     const editModal = document.getElementById('edit-modal');
     if (editModal) {
@@ -184,11 +184,8 @@ function saveChanges(storyId: number): void {
     displayStories(newStatus);
 }
 
-
-
-
 function deleteStory(storyId: number): void {
-    apiService.deleteStory(storyId);
+    ApiService.delete('stories', storyId);
 
     displayStories('todo'); 
 }
@@ -218,7 +215,7 @@ function addStory(event: Event): void {
         ownerId
     };
 
-    apiService.addStory(newStory);
+    ApiService.add('stories', newStory);
 
     displayStories('todo');
 

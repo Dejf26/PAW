@@ -1,6 +1,8 @@
-import { apiService } from './apiService';
 import { Project } from './interfaces/projectInterface';
 import { User } from "./user";
+import { ApiService } from './apiService';
+import { ProjectService } from './projectService';
+
 
 const user = User.getInstance();
 const userNameElement = document.getElementById('user-name');
@@ -8,9 +10,9 @@ if (userNameElement) {
   userNameElement.textContent = user.getUser().firstName;
 }
 
+ApiService.registerService('projects', new ProjectService());
+
 const activeProjectId = localStorage.getItem('activeProjectId');
-
-
 
 function displayProjects(projects: Project[]): void {
   const projectsContainer = document.getElementById('projects-container');
@@ -66,19 +68,19 @@ function addProjectForm(event: Event): void {
       description: descriptionInput.value,
     };
 
-    apiService.addProject(newProject);
+    ApiService.add<Project>('projects', newProject);
 
     nameInput.value = '';
     descriptionInput.value = '';
 
-    const updatedProjects = apiService.getProjects();
+    const updatedProjects = ApiService.getAll<Project>('projects');
     displayProjects(updatedProjects);
   }
 }
 
 function openUpdateModal(projectId: number): void {
   const updateModal = document.getElementById('update-modal');
-  const projectToUpdate = apiService.getProjects().find((p) => p.id === projectId);
+  const projectToUpdate = ApiService.getOne<Project>('projects', projectId);
 
   if (updateModal && projectToUpdate) {
     const projectNameInput = document.getElementById('update-project-name') as HTMLInputElement;
@@ -112,9 +114,9 @@ function saveChanges(projectId: number): void {
       description: projectDescriptionInput.value,
     };
 
-    apiService.updateProject(updatedProject);
+    ApiService.update<Project>('projects', updatedProject);
 
-    const updatedProjects = apiService.getProjects();
+    const updatedProjects = ApiService.getAll<Project>('projects');
     displayProjects(updatedProjects);
 
     const updateModal = document.getElementById('update-modal');
@@ -128,9 +130,9 @@ function deleteProject(projectId: number): void {
   const confirmDelete = confirm('Are you sure you want to delete this project?');
 
   if (confirmDelete) {
-    apiService.deleteProject(projectId);
+    ApiService.delete('projects', projectId);
 
-    const updatedProjects = apiService.getProjects();
+    const updatedProjects = ApiService.getAll<Project>('projects');
     displayProjects(updatedProjects);
 
     const activeProjectId = localStorage.getItem('activeProjectId');
@@ -140,10 +142,9 @@ function deleteProject(projectId: number): void {
   }
 }
 
-
 function selectProject(projectId: number): void {
   localStorage.setItem('activeProjectId', String(projectId));
-   const selectButtons = document.querySelectorAll('.btn-select') as NodeListOf<HTMLButtonElement>;
+  const selectButtons = document.querySelectorAll('.btn-select') as NodeListOf<HTMLButtonElement>;
   selectButtons.forEach(button => {
     button.textContent = 'Select';
     button.disabled = false;
@@ -156,7 +157,7 @@ function selectProject(projectId: number): void {
   window.location.href = './active-project.html';
 }
 
-const projects = apiService.getProjects();
+const projects = ApiService.getAll<Project>('projects');
 
 displayProjects(projects);
 
@@ -175,4 +176,3 @@ if (toggleFormButton) {
     }
   });
 }
-
