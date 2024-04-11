@@ -6,12 +6,6 @@ import { createNavbar, setUserDisplayName } from './navbar';
 createNavbar();
 setUserDisplayName();
 
-// const user = User.getInstance();
-// const userNameElement = document.getElementById('user-name');
-// if (userNameElement) {
-//   userNameElement.textContent = user.getUser().firstName;
-// }
-
 ApiService.registerService('projects', new ProjectService());
 
 const activeProjectId = localStorage.getItem('activeProjectId');

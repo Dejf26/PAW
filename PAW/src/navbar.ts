@@ -38,6 +38,10 @@ export function createNavbar(): void {
     storiesLink.href = 'stories.html';
     storiesLink.textContent = 'Stories';
 
+    const tasksLink = document.createElement('a');
+    tasksLink.href = 'tasks.html';
+    tasksLink.textContent = 'Tasks';
+
     const userInfo = document.createElement('div');
     userInfo.classList.add('user-info');
     const userName = document.createElement('span');
@@ -48,6 +52,8 @@ export function createNavbar(): void {
     navLinks.appendChild(allProjectsLink);
     navLinks.appendChild(activeProjectLink);
     navLinks.appendChild(storiesLink);
+    navLinks.appendChild(tasksLink);
+
 
     navContainer.appendChild(logo);
     navContainer.appendChild(navLinks);

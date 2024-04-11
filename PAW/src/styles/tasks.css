@@ -1,0 +1,117 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  form {
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  
+  #add-task-container {
+    background-color: #e7e7e7;
+    padding: 20px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  
+  #add-task-container button[type="submit"] {
+    background-color: #61bbc7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  
+
+  .btn-edit {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+  }
+  
+  .btn-delete {
+    background-color: #f44336;
+    color: white;
+    border: none;
+  }
+  
+  .task-card {
+    border: 1px solid #000000;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    background-color: #e7e7e7;
+  }
+  
+  .modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: white;
+    z-index: 1000;
+    border: 1px solid #000;
+  }
+  
+  .modal-content {
+    padding: 10px;
+  }
+  
+  #close-modal-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+
+  #edit-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: white;
+    z-index: 1000;
+  }
+  
+  .modal-input {
+    width: calc(100% - 20px);
+    margin-bottom: 10px;
+    padding: 8px;
+  }
+  
+  .modal-buttons {
+    text-align: right;
+  }
+  
+  .modal-buttons button {
+    margin-left: 10px;
+  }
+  
+  .hidden-fields {
+    display: none;
+  }

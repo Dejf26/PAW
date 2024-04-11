@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Tasks</title>
+    <link rel="stylesheet" href="styles/tasks.css">
+</head>
+<body>
+    <h1>Add Task</h1>
+    <div id="add-task-container">
+        <form id="add-task-form">
+            <label for="task-name">Task name:</label>
+            <input type="text" id="task-name" required>
+
+            <label for="task-description">Task description:</label>
+            <input type="text" id="task-description" required>
+
+            <label for="task-priority">Priority:</label>
+            <select id="task-priority" required>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+
+            <label for="task-story">Story ID:</label>
+            <input type="number" id="task-story" required>
+
+            <label for="task-estimated-time">Estimated time (hours):</label>
+            <input type="number" id="task-estimated-time" required>
+
+            <button type="submit" id="add-task-button">Add task</button>
+        </form>
+        <button id="toggle-task-form-button">Toggle Form</button>
+    </div>
+
+    <h1>Tasks List</h1>
+    <div id="task-list"></div>
+
+    <div id="task-details-modal" class="modal">
+        <button id="close-modal-btn">Close</button>
+        <div class="modal-content"></div>
+    </div>
+    
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal" class="close">&times;</span>
+            <h2>Edit Task</h2>
+            <form id="edit-task-form">
+                <label for="edit-task-name">Name:</label>
+                <input type="text" id="edit-task-name" required>
+    
+                <label for="edit-task-description">Description:</label>
+                <input type="text" id="edit-task-description" required>
+    
+                <label for="edit-task-priority">Priority:</label>
+                <select id="edit-task-priority" required>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+    
+                <label for="edit-task-story">Story ID:</label>
+                <input type="number" id="edit-task-story" required>
+                <input type="hidden" id="create-date" value="${task.createdAt}">
+
+                <label for="edit-task-assigned">Assigned To:</label>
+                <select id="edit-task-assigned" required>
+                    <!-- Options will be dynamically added via JavaScript -->
+                </select>
+    
+                <div class="modal-buttons">
+                    <button type="button" id="save-changes-button">Save Changes</button>
+                    <button type="button" id="cancel-button">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="/src/taskList.ts"></script>
+</body>
+</html>
