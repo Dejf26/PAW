@@ -115,3 +115,26 @@ body {
   .hidden-fields {
     display: none;
   }
+
+
+
+
+  
+
+  .kanban-board {
+    display: flex;
+    justify-content: space-around;
+}
+.column {
+    width: 30%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+.task-list {
+    min-height: 100px;
+    margin-top: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 5px;
+}

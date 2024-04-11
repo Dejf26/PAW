@@ -115,21 +115,41 @@ function createTaskElement(task: Task): HTMLElement {
     return taskElement;
 }
 
-function displayTasks(): void {
-    const tasks = ApiService.getAll<Task>('tasks');
+const todoList = document.getElementById('todo-list');
+const doingList = document.getElementById('doing-list');
+const doneList = document.getElementById('done-list');
 
-    const taskList = document.getElementById('task-list');
-    if (taskList) {
-        taskList.innerHTML = '';
+function displayTasksInKanban(tasks: Task[]) {
+    if (todoList && doingList && doneList) {
+        todoList.innerHTML = '';
+        doingList.innerHTML = '';
+        doneList.innerHTML = '';
 
-        tasks.forEach(task => {
+        tasks.forEach((task: Task) => {
             const taskElement = createTaskElement(task);
-            taskList.appendChild(taskElement);
+            if (task.state === 'todo') {
+                todoList.appendChild(taskElement);
+            } else if (task.state === 'doing') {
+                doingList.appendChild(taskElement);
+            } else if (task.state === 'done') {
+                doneList.appendChild(taskElement);
+            }
         });
     } else {
-        console.error('Task list not found');
+        console.error('One or more task lists are missing');
     }
 }
+
+async function displayKanbanBoard() {
+    const tasks = await ApiService.getAll<Task>('tasks');
+    displayTasksInKanban(tasks);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    displayKanbanBoard();
+});
+
+
 
 async function openEditModal(task: Task): Promise<void> {
     const editModal = document.getElementById('edit-modal');
@@ -146,12 +166,10 @@ async function openEditModal(task: Task): Promise<void> {
             editTaskPriorityInput.value = task.priority;
             editTaskStoryIdInput.value = task.storyId.toString();
 
-            // Pobranie listy użytkowników z klasy User
             const userList = User.getInstance().getUsers().filter(user => 
                 user.role === UserRole.DEVELOPER || user.role === UserRole.DEVOPS
             );
             
-            // Wypełnienie pola wyboru użytkownikami
             editTaskAssignedToSelect.innerHTML = '';
             userList.forEach(user => {
                 const option = document.createElement('option');
@@ -160,7 +178,6 @@ async function openEditModal(task: Task): Promise<void> {
                 editTaskAssignedToSelect.appendChild(option);
             });
 
-            // Wybór aktualnie przypisanego użytkownika
             const assignedUserId = userList.findIndex(user => user.id === parseInt(task.assignedTo ?? ''));
             editTaskAssignedToSelect.selectedIndex = assignedUserId;
 
@@ -174,29 +191,27 @@ async function openEditModal(task: Task): Promise<void> {
                 cancelButton.onclick = () => editModal.style.display = 'none';
             }
 
-            // Deklaracja zmiennej modalContent
             const modalContent = editModal.querySelector('.modal-content');
             if (modalContent) {
-                // Sprawdzamy, czy przycisk Mark as Done już istnieje wewnątrz aktualnego zadania
                 let markAsDoneButton = modalContent.querySelector('.mark-as-done-button') as HTMLButtonElement;
-                // Jeśli nie istnieje, tworzymy nowy przycisk
                 if (!markAsDoneButton) {
                     markAsDoneButton = document.createElement('button') as HTMLButtonElement;
                     markAsDoneButton.textContent = 'Mark as Done';
-                    markAsDoneButton.classList.add('mark-as-done-button'); // Dodanie klasy CSS
+                    markAsDoneButton.classList.add('mark-as-done-button');
                     modalContent.appendChild(markAsDoneButton);
                 }
         
-                // Ustawienie atrybutu data-task-id na przycisku "Mark as Done"
                 markAsDoneButton.setAttribute('data-task-id', task.id.toString());
         
-                // Dodajemy słuchacza zdarzeń do przycisku "Mark as Done"
                 markAsDoneButton.addEventListener('click', async () => {
-                    task.state = 'done'; // Zmiana stanu zadania na "done"
-                    task.endDate = new Date(); // Ustawienie daty zakończenia na bieżącą datę
-        
-                    // Aktualizacja zadania w API
+                    task.state = 'done'; 
+                    task.endDate = new Date(); 
+
                     await ApiService.update<Task>('tasks', task);
+                    displayKanbanBoard();
+                    editModal.style.display = 'none';
+
+
                 });
             } else {
                 console.error('Modal content not found');
@@ -218,12 +233,11 @@ function saveChanges(task: Task): void {
     const newDescription = editTaskDescriptionInput.value;
     const newPriority = editTaskPriorityInput.value as 'low' | 'medium' | 'high';
     const newStoryId = parseInt(editTaskStoryIdInput.value);
-    const assignedToUserId = parseInt(editTaskAssignedToSelect.value); // Pobieramy ID wybranego użytkownika
+    const assignedToUserId = parseInt(editTaskAssignedToSelect.value); 
 
-    // Znajdujemy użytkownika na podstawie wybranego ID
     const assignedToUser = User.getInstance().getUsers().find(user => user.id === assignedToUserId);
 
-    let assignedTo = 'Unassigned'; // Domyślna wartość, jeśli użytkownik nie zostanie znaleziony
+    let assignedTo = 'Unassigned';
     if (assignedToUser) {
         assignedTo = `${assignedToUser.firstName} ${assignedToUser.lastName} (${assignedToUser.role})`;
     }
@@ -234,12 +248,12 @@ function saveChanges(task: Task): void {
         description: newDescription,
         priority: newPriority,
         storyId: newStoryId,
-        assignedTo: assignedTo, // Przypisujemy pełne dane użytkownika
-        estimatedTime: 0, // Domyślnie ustawiono na 0, możesz zmienić to, jeśli jest potrzeba
-        state: 'doing', // Zmiana stanu na "doing"
-        createdAt: task.createdAt, // Ustawienie daty utworzenia na wartość oryginalną
-        startDate: new Date(), // Ustawienie daty startu na bieżącą datę
-        endDate: undefined // Domyślnie ustawiono na undefined, możesz zmienić to, jeśli jest potrzeba
+        assignedTo: assignedTo,
+        estimatedTime: 0, 
+        state: 'doing', 
+        createdAt: task.createdAt,
+        startDate: new Date(), 
+        endDate: undefined 
     };
 
     ApiService.update<Task>('tasks', updatedTask);
@@ -249,13 +263,13 @@ function saveChanges(task: Task): void {
         editModal.style.display = 'none';
     }
 
-    displayTasks();
+    displayKanbanBoard();
 }
 
 
 function deleteTask(taskId: number): void {
     ApiService.delete('tasks', taskId);
-    displayTasks(); // Ponowne wyświetlenie listy zadań po usunięciu zadania
+    displayKanbanBoard(); 
 }
 
 
@@ -291,7 +305,7 @@ function addTask(event: Event): void {
 
     ApiService.add<Task>('tasks', newTask);
 
-    displayTasks();
+    displayKanbanBoard();
 
     nameInput.value = '';
     descriptionInput.value = '';
@@ -306,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addTaskForm.addEventListener('submit', addTask);
     }
 
-    displayTasks();
+    displayKanbanBoard();
 });
 
 const toggleTaskFormButton = document.getElementById('toggle-task-form-button');
@@ -319,3 +333,4 @@ if (toggleTaskFormButton) {
         }
     });
 }
+
