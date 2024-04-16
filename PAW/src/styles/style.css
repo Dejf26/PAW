@@ -73,6 +73,7 @@ button {
   padding: 20px;
   background-color: white;
   z-index: 1000;
+  border: 1px solid #000;
 }
 
 .modal-input {
@@ -86,7 +87,7 @@ button {
 }
 
 .modal-buttons button {
-  margin-left: 10px;
+  margin-left: 3px;
 }
 
 .hidden-fields {

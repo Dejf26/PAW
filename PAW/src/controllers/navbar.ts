@@ -1,5 +1,5 @@
 import { User } from "./user";
-import "/src/navbar.css";
+import "/src/styles/navbar.css";
 
 
 export function setUserDisplayName(): void {
@@ -31,15 +31,15 @@ export function createNavbar(): void {
     allProjectsLink.textContent = 'All Projects';
 
     const activeProjectLink = document.createElement('a');
-    activeProjectLink.href = 'active-project.html';
+    activeProjectLink.href = '/src/pages/activeProjects.html';
     activeProjectLink.textContent = 'Active Project';
 
     const storiesLink = document.createElement('a');
-    storiesLink.href = 'stories.html';
+    storiesLink.href = '/src/pages/stories.html';
     storiesLink.textContent = 'Stories';
 
     const tasksLink = document.createElement('a');
-    tasksLink.href = 'tasks.html';
+    tasksLink.href = '/src/pages/tasks.html';
     tasksLink.textContent = 'Tasks';
 
     const userInfo = document.createElement('div');

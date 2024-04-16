@@ -1,5 +1,5 @@
 // user.ts
-import { User as UserModel, UserRole } from "./interfaces/userInterface";
+import { User as UserModel, UserRole } from "../interfaces/userInterface";
 
 export class User {
   private static instance: User | null = null;
@@ -7,6 +7,9 @@ export class User {
   private static readonly mockDeveloperUser: UserModel = { id: 2, firstName: "Jane", lastName: "Smith", role: UserRole.DEVELOPER };
   private static readonly mockDevOpsUser: UserModel = { id: 3, firstName: "Tom", lastName: "Brown", role: UserRole.DEVOPS };
   private static readonly userList: UserModel[] = [User.mockAdminUser, User.mockDeveloperUser, User.mockDevOpsUser]; // Lista użytkowników
+    id: any;
+    firstName: any;
+    lastName: any;
 
   private constructor() {}
 
@@ -29,6 +32,7 @@ export class User {
     User.mockAdminUser.role = role;
   }
 }
+
 
 
 

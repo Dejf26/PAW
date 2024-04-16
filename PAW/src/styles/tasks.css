@@ -96,6 +96,7 @@ body {
     padding: 20px;
     background-color: white;
     z-index: 1000;
+    border: 1px solid #000;
   }
   
   .modal-input {
@@ -109,17 +110,13 @@ body {
   }
   
   .modal-buttons button {
-    margin-left: 10px;
+    margin-left: 3px;
   }
   
   .hidden-fields {
     display: none;
   }
 
-
-
-
-  
 
   .kanban-board {
     display: flex;

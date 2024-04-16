@@ -6,5 +6,5 @@ export interface Story {
     project: number;
     createdAt: Date;
     status: 'todo' | 'doing' | 'done';
-    ownerId: number;
+    ownerId?: number;
 }

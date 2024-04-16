@@ -1,6 +1,6 @@
-import { Project } from './interfaces/projectInterface';
-import { ApiService } from './apiService';
-import { ProjectService } from './projectService';
+import { Project } from '../interfaces/projectInterface';
+import { ApiService } from '../services/apiService';
+import { ProjectService } from '../services/projectService';
 import { createNavbar, setUserDisplayName } from './navbar';
 
 createNavbar();
@@ -150,7 +150,7 @@ function selectProject(projectId: number): void {
     selectedButton.textContent = 'Selected';
     selectedButton.disabled = true;
   }
-  window.location.href = './active-project.html';
+  window.location.href = './activeProjects.html';
 }
 
 const projects = ApiService.getAll<Project>('projects');

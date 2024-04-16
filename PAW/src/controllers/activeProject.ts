@@ -1,5 +1,5 @@
-import { Project } from "./interfaces/projectInterface";
-import { ProjectService } from "./projectService"; // Zmiana importu
+import { Project } from "../interfaces/projectInterface";
+import { ProjectService } from "../services/projectService"; // Zmiana importu
 import { createNavbar, setUserDisplayName } from "./navbar";
 
 createNavbar();

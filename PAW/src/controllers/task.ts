@@ -1,9 +1,9 @@
-import { Task } from "./interfaces/taskInterface";
-import { ApiService } from './apiService';
-import { TaskService } from "./taskService";
+import { Task } from "../interfaces/taskInterface";
+import { ApiService } from '../services/apiService';
+import { TaskService } from "../services/taskService";
 import { createNavbar, setUserDisplayName } from "./navbar";
 import { User } from "./user";
-import { UserRole } from "./interfaces/userInterface";
+import { UserRole } from "../interfaces/userInterface";
 
 
 createNavbar();
@@ -333,4 +333,3 @@ if (toggleTaskFormButton) {
         }
     });
 }
-

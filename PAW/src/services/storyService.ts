@@ -1,5 +1,4 @@
-// storyService.ts
-import { Story } from "./interfaces/storyInterface";
+import { Story } from "../interfaces/storyInterface";
 import { ResourceService } from "./resourceService";
 
 export class StoryService extends ResourceService<Story> {

@@ -1,5 +1,5 @@
 // projectService.ts
-import { Project } from "./interfaces/projectInterface";
+import { Project } from "../interfaces/projectInterface";
 import { ResourceService } from "./resourceService";
 
 export class ProjectService extends ResourceService<Project> {

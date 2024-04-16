@@ -1,10 +1,45 @@
-import { Story } from "./interfaces/storyInterface";
-import { ApiService } from './apiService';
-import { StoryService } from './storyService';
+import { Story } from "../interfaces/storyInterface";
+import { ApiService } from '../services/apiService';
+import { StoryService } from '../services/storyService';
 import { createNavbar, setUserDisplayName } from "./navbar";
+import { User } from "../interfaces/userInterface"
+import { User as UserService } from "./user";
+
+
+
 
 createNavbar();
 setUserDisplayName();
+
+
+function createUserOption(user: User): HTMLOptionElement {
+    const option = document.createElement('option');
+    option.value = user.id.toString();
+    option.textContent = `${user.firstName} ${user.lastName}`;
+    return option;
+}
+
+function displayUserSelectOptions(): void {
+    const userSelect = document.getElementById('story-owner') as HTMLSelectElement;
+    if (userSelect) {
+        const userList = UserService.getInstance().getUsers();
+        const emptyOption = document.createElement('option');
+        emptyOption.value = '';
+        emptyOption.textContent = '';
+        userSelect.appendChild(emptyOption);
+        
+        userList.forEach(user => {
+            const option = createUserOption(user);
+            userSelect.appendChild(option);
+        });
+    }
+}
+
+
+// Wywołanie funkcji do wyświetlenia listy wyboru użytkowników po załadowaniu strony
+document.addEventListener('DOMContentLoaded', () => {
+    displayUserSelectOptions();
+});
 
 ApiService.registerService('stories', new StoryService());
 
@@ -44,7 +79,7 @@ function displayStoryDetailsModal(story: Story): void {
             modalContent.appendChild(statusParagraph);
             modalContent.appendChild(ownerIdParagraph);
 
-            const closeButton = document.getElementById('close-details-modal');
+            const closeButton = document.getElementById('close-modal-btn');
             if (closeButton) {
                 closeButton.onclick = () => {
                     if (modal) {
@@ -96,29 +131,40 @@ function createStoryElement(story: Story): HTMLElement {
     return storyElement;
 }
 
-function displayStories(status: 'todo' | 'doing' | 'done'): void {
-    const stories = ApiService.getAll<Story>('stories').filter(story => story.status === status);
+const todoList = document.getElementById('todo-list');
+const doingList = document.getElementById('doing-list');
+const doneList = document.getElementById('done-list');
 
-    const storyList = document.getElementById('story-list');
-    if (storyList) {
-        storyList.innerHTML = '';
+function displayStoriesInKanban(stories: Story[]) {
+    if (todoList && doingList && doneList) {
+        todoList.innerHTML = '';
+        doingList.innerHTML = '';
+        doneList.innerHTML = '';
 
-        const categoryHeading = document.createElement('h2');
-        categoryHeading.textContent = capitalize(status);
-        storyList.appendChild(categoryHeading);
-
-        stories.forEach(story => {
-            const li = createStoryElement(story);
-            storyList.appendChild(li);
+        stories.forEach((story: Story) => {
+            const storyElement = createStoryElement(story);
+            if (story.status === 'todo') {
+                todoList.appendChild(storyElement);
+            } else if (story.status === 'doing') {
+                doingList.appendChild(storyElement);
+            } else if (story.status === 'done') {
+                doneList.appendChild(storyElement);
+            }
         });
     } else {
-        console.error('Not found');
+        console.error('One or more stories lists are missing');
     }
 }
 
-function capitalize(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+async function displayKanbanBoard() {
+    const stories = await ApiService.getAll<Story>('stories');
+    displayStoriesInKanban(stories);
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    displayKanbanBoard();
+});
+
 
 function openEditModal(story: Story): void {
     const editModal = document.getElementById('edit-modal');
@@ -127,12 +173,30 @@ function openEditModal(story: Story): void {
         const editStoryDescriptionInput = document.getElementById('edit-story-description') as HTMLInputElement;
         const editStoryPriorityInput = document.getElementById('edit-story-priority') as HTMLSelectElement;
         const editStoryStatusInput = document.getElementById('edit-story-status') as HTMLSelectElement;
+        const editStoryOwnerInput = document.getElementById('edit-story-owner') as HTMLSelectElement;
 
-        if (editStoryNameInput && editStoryDescriptionInput && editStoryPriorityInput && editStoryStatusInput) {
+        if (editStoryNameInput && editStoryDescriptionInput && editStoryPriorityInput && editStoryStatusInput && editStoryOwnerInput) {
             editStoryNameInput.value = story.name;
             editStoryDescriptionInput.value = story.description;
             editStoryPriorityInput.value = story.priority;
             editStoryStatusInput.value = story.status;
+
+            editStoryOwnerInput.innerHTML = '';
+
+            const userList = UserService.getInstance().getUsers();
+            userList.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id.toString();
+                option.textContent = `${user.firstName} ${user.lastName} (${user.role})`;
+
+                editStoryOwnerInput.appendChild(option);
+            });
+
+            editStoryOwnerInput.value = '';
+
+            if (story.ownerId) {
+                editStoryOwnerInput.value = story.ownerId.toString();
+            }
 
             const saveChangesButton = document.getElementById('save-changes-button');
             if (saveChangesButton) {
@@ -143,22 +207,26 @@ function openEditModal(story: Story): void {
             if (cancelButton) {
                 cancelButton.onclick = () => editModal.style.display = 'none';
             }
+            editStoryOwnerInput.required = story.ownerId !== undefined;
 
             editModal.style.display = 'block';
         }
     }
 }
 
+
 function saveChanges(storyId: number): void {
     const editStoryNameInput = document.getElementById('edit-story-name') as HTMLInputElement;
     const editStoryDescriptionInput = document.getElementById('edit-story-description') as HTMLInputElement;
     const editStoryPriorityInput = document.getElementById('edit-story-priority') as HTMLSelectElement;
     const editStoryStatusInput = document.getElementById('edit-story-status') as HTMLSelectElement;
+    const editStoryOwnerInput = document.getElementById('edit-story-owner') as HTMLSelectElement;
 
     const newName = editStoryNameInput.value;
     const newDescription = editStoryDescriptionInput.value;
     const newPriority = editStoryPriorityInput.value as 'low' | 'medium' | 'high';
     const newStatus = editStoryStatusInput.value as 'todo' | 'doing' | 'done';
+    const newOwnerId = editStoryOwnerInput.value ? parseInt(editStoryOwnerInput.value) : undefined; // Sprawdzamy, czy właściciel został wybrany
 
     const updatedStory: Story = {
         id: storyId,
@@ -168,7 +236,7 @@ function saveChanges(storyId: number): void {
         project: 0,
         createdAt: new Date(),
         status: newStatus,
-        ownerId: 0
+        ownerId: newOwnerId !== undefined ? newOwnerId : 0 // Przypisanie wartości tylko wtedy, gdy wybierzemy właściciela
     };
 
     ApiService.update('stories', updatedStory);
@@ -178,13 +246,13 @@ function saveChanges(storyId: number): void {
         editModal.style.display = 'none';
     }
 
-    displayStories(newStatus);
+    displayKanbanBoard();
 }
 
 function deleteStory(storyId: number): void {
     ApiService.delete('stories', storyId);
 
-    displayStories('todo'); 
+    displayKanbanBoard();
 }
 
 function addStory(event: Event): void {
@@ -194,13 +262,13 @@ function addStory(event: Event): void {
     const descriptionInput = document.getElementById('story-description') as HTMLInputElement;
     const prioritySelect = document.getElementById('story-priority') as HTMLSelectElement;
     const projectInput = document.getElementById('story-project') as HTMLInputElement;
-    const ownerIdInput = document.getElementById('story-owner') as HTMLInputElement;
+    const ownerIdInput = document.getElementById('story-owner') as HTMLSelectElement;
 
     const name = nameInput.value;
     const description = descriptionInput.value;
     const priority = prioritySelect.value as 'low' | 'medium' | 'high';
     const project = parseInt(projectInput.value);
-    const ownerId = parseInt(ownerIdInput.value);
+    const ownerId = ownerIdInput.value ? parseInt(ownerIdInput.value) : undefined; // Sprawdzamy, czy właściciel został wybrany
     const newStory: Story = {
         id: Date.now(), 
         name,
@@ -214,7 +282,7 @@ function addStory(event: Event): void {
 
     ApiService.add('stories', newStory);
 
-    displayStories('todo');
+displayKanbanBoard();
 
     nameInput.value = '';
     descriptionInput.value = '';
@@ -224,28 +292,11 @@ function addStory(event: Event): void {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const btnTodo = document.getElementById('btnTodo');
-    const btnDoing = document.getElementById('btnDoing');
-    const btnDone = document.getElementById('btnDone');
-
-    if (btnTodo) {
-        btnTodo.addEventListener('click', () => displayStories('todo'));
-    }
-
-    if (btnDoing) {
-        btnDoing.addEventListener('click', () => displayStories('doing'));
-    }
-
-    if (btnDone) {
-        btnDone.addEventListener('click', () => displayStories('done'));
-    }
-
-    const addStoryForm = document.getElementById('add-story-form');
+      const addStoryForm = document.getElementById('add-story-form');
     if (addStoryForm) {
         addStoryForm.addEventListener('submit', addStory);
     }
-
-    displayStories('todo');
+    displayKanbanBoard();
 });
 
 const toggleStoryFormButton = document.getElementById('toggle-story-form-button');
